@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Waxed Studio — Demo</title>
+<meta name="robots" content="noindex, nofollow" />
+<link rel="icon" href="public/images/favicon-rounded.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --teal: #123F3B;
+    --teal-2: #0A211E;
+    --brand: #02918E;
+    --brand-dark: #026F6C;
+    --tint: #E3F2F1;
+    --cream: #F6FAF9;
+    --white: #FFFFFF;
+    --ink: #12302D;
+    --muted: #5C7472;
+    --border: #DCEAE8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--white); color: var(--ink);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    line-height: 1.6;
+  }
+  a { color: inherit; text-decoration: none; }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+
+  nav {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(10, 33, 30, 0.96);
+    backdrop-filter: blur(17px) saturate(115%);
+    -webkit-backdrop-filter: blur(17px) saturate(115%);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 80px; gap: 20px; }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .brand img { height: 42px; width: 42px; border-radius: 50%; display: block; object-fit: cover; background: #fff; }
+  .brand span { color: #fff; font-weight: 700; font-size: 15px; letter-spacing: -0.01em; line-height: 1.25; }
+  .brand span small { display: block; color: rgba(255,255,255,0.6); font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; }
+  .nav-links { display: flex; gap: 26px; font-size: 12.5px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; }
+  .nav-links a { color: rgba(255,255,255,0.75); transition: color .15s ease; }
+  .nav-links a:hover { color: #fff; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--brand); color: var(--white);
+    font-weight: 700; font-size: 13.5px;
+    padding: 13px 24px; border-radius: 10px;
+    border: none; cursor: pointer;
+    transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+    white-space: nowrap;
+  }
+  .btn:hover { transform: translateY(-1px); box-shadow: 0 10px 24px rgba(2,145,142,0.4); background: var(--brand-dark); }
+  .btn-sm { padding: 10px 18px; font-size: 12.5px; }
+  .btn-outline { background: rgba(255,255,255,0.08); color: var(--white); border: 1.5px solid rgba(255,255,255,0.3); }
+  .btn-outline:hover { border-color: #fff; box-shadow: none; background: rgba(255,255,255,0.08); }
+
+  header.hero {
+    background: linear-gradient(180deg, var(--teal) 0%, var(--teal-2) 100%);
+    padding: 88px 0 96px; position: relative; overflow: hidden;
+  }
+  .hero-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 56px; align-items: center; }
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 11.5px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase;
+    color: #fff; background: rgba(2,145,142,0.24); border: 1px solid rgba(2,145,142,0.45);
+    padding: 7px 16px; border-radius: 999px; margin-bottom: 24px;
+  }
+  h1.hero-h1 { font-size: 40px; font-weight: 800; color: #fff; line-height: 1.28; margin-bottom: 18px; letter-spacing: -0.01em; }
+  header.hero p.sub { font-size: 16px; color: rgba(255,255,255,0.8); max-width: 470px; margin-bottom: 32px; line-height: 1.8; }
+  .cta-row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+
+  .hero-photo { position: relative; max-width: 380px; margin: 0 auto; }
+  .hero-logo-panel {
+    background: linear-gradient(160deg, rgba(255,255,255,0.10), rgba(255,255,255,0.02));
+    border: 1px solid rgba(255,255,255,0.14);
+    border-radius: 28px; padding: 48px 40px;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.32);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .hero-logo-panel img { width: 100%; max-width: 240px; display: block; box-shadow: 0 16px 34px rgba(0,0,0,0.3); border-radius: 50%; }
+  .hero-badge {
+    position: absolute; bottom: -18px; left: -18px;
+    background: var(--white); border-radius: 16px; padding: 14px 20px;
+    box-shadow: 0 14px 30px rgba(0,0,0,0.18); display: flex; align-items: center; gap: 12px;
+  }
+  .hero-badge .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--brand); flex-shrink: 0; }
+  .hero-badge .name { font-size: 12.5px; font-weight: 700; color: var(--ink); }
+  .hero-badge .role { font-size: 10.5px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.03em; }
+
+  section { padding: 84px 0; }
+  section.tint { background: var(--cream); }
+
+  .section-head { text-align: center; max-width: 640px; margin: 0 auto 50px; }
+  .section-head .kicker { color: var(--brand-dark); font-weight: 700; font-size: 12.5px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 12px; display: block; }
+  .section-head h2 { font-size: 30px; font-weight: 800; margin-bottom: 14px; color: var(--teal); letter-spacing: -0.01em; }
+  .section-head p { color: var(--muted); font-size: 15.5px; line-height: 1.75; }
+
+  /* Stat strip */
+  .stat-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; text-align: center; }
+  .stat-item .num { font-size: 34px; font-weight: 800; color: var(--teal); letter-spacing: -0.01em; }
+  .stat-item .label { font-size: 12.5px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; margin-top: 6px; }
+
+  /* Services */
+  .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+  .service-item { background: var(--white); border: 1px solid var(--border); border-radius: 18px; padding: 32px 26px; text-align: center; box-shadow: 0 10px 26px rgba(18,48,45,0.05); }
+  .service-item .icon-circle { width: 58px; height: 58px; border-radius: 50%; background: var(--tint); display: flex; align-items: center; justify-content: center; margin: 0 auto 18px; }
+  .service-item .icon-circle svg { width: 26px; height: 26px; color: var(--brand-dark); }
+  .service-item h3 { font-size: 16px; font-weight: 700; color: var(--teal); margin-bottom: 10px; }
+  .service-item p { font-size: 13.5px; color: var(--muted); line-height: 1.7; }
+
+  /* Notice band */
+  .notice {
+    background: rgba(2,145,142,0.08); border: 1px solid rgba(2,145,142,0.22);
+    border-radius: 18px; padding: 30px 34px; text-align: center; max-width: 760px; margin: 0 auto;
+    display: flex; flex-direction: column; align-items: center; gap: 14px;
+  }
+  .notice .icon-circle { width: 50px; height: 50px; border-radius: 50%; background: var(--white); display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 16px rgba(2,145,142,0.18); }
+  .notice .icon-circle svg { width: 24px; height: 24px; color: var(--brand-dark); }
+  .notice .label { color: var(--brand-dark); font-weight: 800; font-size: 12.5px; letter-spacing: 0.08em; text-transform: uppercase; }
+  .notice p { color: var(--muted); font-size: 14.5px; line-height: 1.75; }
+
+  /* Reassurance section */
+  .reassure { max-width: 720px; margin: 0 auto; text-align: center; }
+  .reassure p { color: var(--muted); font-size: 16px; line-height: 1.9; margin-bottom: 18px; }
+  .reassure-links { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 24px; }
+  .reassure-links span { background: var(--white); border: 1px solid var(--border); color: var(--teal); font-size: 12.5px; font-weight: 700; padding: 8px 16px; border-radius: 999px; }
+
+  /* About */
+  .about-grid { display: grid; grid-template-columns: 0.72fr 1.28fr; gap: 48px; align-items: center; }
+  .about-badges { background: var(--teal); border-radius: 24px; padding: 32px 26px; display: flex; flex-direction: column; gap: 18px; box-shadow: 0 20px 44px rgba(18,48,45,0.22); }
+  .about-badges .abadge { display: flex; align-items: center; gap: 14px; }
+  .about-badges .abadge .num { font-size: 22px; font-weight: 800; color: #fff; min-width: 64px; }
+  .about-badges .abadge .txt { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 0.04em; line-height: 1.4; }
+  .about-badges .divider { height: 1px; background: rgba(255,255,255,0.14); }
+  .about-text p { color: var(--muted); font-size: 15.5px; line-height: 1.9; margin-bottom: 16px; }
+  .about-text strong { color: var(--teal); }
+  .about-text .credential { display: inline-block; background: var(--tint); color: var(--brand-dark); font-size: 12px; font-weight: 700; padding: 6px 14px; border-radius: 999px; margin-bottom: 16px; }
+
+  /* Quote band */
+  .quote-band { background: var(--teal); color: #fff; text-align: center; }
+  .quote-band p { font-size: 22px; font-weight: 600; max-width: 720px; margin: 0 auto; line-height: 1.6; }
+  .quote-band .rec { margin-top: 22px; font-size: 13px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: rgba(255,255,255,0.65); }
+
+  /* Contact */
+  .info-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+  .info-card { background: var(--white); border: 1px solid var(--border); border-radius: 18px; padding: 26px; box-shadow: 0 10px 26px rgba(18,48,45,0.05); }
+  .info-card h3 { font-size: 12.5px; font-weight: 700; margin-bottom: 12px; color: var(--brand-dark); text-transform: uppercase; letter-spacing: 0.05em; }
+  .info-card p { color: var(--ink); font-size: 14px; line-height: 1.75; margin-bottom: 2px; }
+  .info-card p a { color: var(--teal); font-weight: 600; }
+
+  .final-cta { text-align: center; background: linear-gradient(180deg, var(--teal) 0%, var(--teal-2) 100%); color: #fff; }
+  .final-cta h2 { font-size: 30px; font-weight: 800; margin-bottom: 14px; color: #fff; letter-spacing: -0.01em; }
+  .final-cta p { color: rgba(255,255,255,0.78); font-size: 15.5px; margin-bottom: 30px; max-width: 480px; margin-left: auto; margin-right: auto; }
+  .final-cta .cta-row { justify-content: center; }
+
+  footer { padding: 44px 0; background: var(--teal-2); }
+  footer .wrap { display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; }
+  footer img { width: 44px; height: 44px; border-radius: 50%; margin-bottom: 14px; background: #fff; }
+  footer p { color: rgba(255,255,255,0.55); font-size: 13px; }
+  footer .biz-name { color: var(--white); font-weight: 700; font-size: 15px; margin-bottom: 4px; }
+  footer a.solv { color: var(--brand); font-weight: 700; text-decoration: underline; }
+
+  @media (max-width: 900px) {
+    .hero-grid, .about-grid { grid-template-columns: 1fr; }
+    .services-grid, .stat-strip { grid-template-columns: 1fr; }
+    .info-grid { grid-template-columns: repeat(2, 1fr); }
+    .nav-links { display: none; }
+    h1.hero-h1 { font-size: 28px; }
+    .section-head h2 { font-size: 24px; }
+    .quote-band p { font-size: 18px; }
+    .about-grid { text-align: center; }
+    .about-badges { max-width: 320px; margin: 0 auto; }
+  }
+  @media (max-width: 520px) {
+    .info-grid { grid-template-columns: 1fr; }
+  }
+
+  #chat-launcher {
+    position: fixed; bottom: 24px; right: 24px; z-index: 60;
+    width: 60px; height: 60px; border-radius: 50%;
+    background: var(--brand); border: none;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; box-shadow: 0 10px 28px rgba(2,145,142,0.45);
+    transition: transform .15s ease;
+  }
+  #chat-launcher:hover { transform: scale(1.06); }
+  #chat-launcher svg { width: 26px; height: 26px; color: #fff; }
+  #chat-panel {
+    position: fixed; bottom: 96px; right: 24px; z-index: 60;
+    width: 350px; max-width: calc(100vw - 32px); height: 460px; max-height: calc(100vh - 140px);
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+    border: 1px solid var(--border); border-radius: 20px;
+    display: none; flex-direction: column; overflow: hidden;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.22);
+  }
+  #chat-panel.open { display: flex; }
+  #chat-panel .chat-head { padding: 16px 18px; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; gap: 10px; background: var(--teal); color: var(--white); }
+  #chat-panel .chat-head .dot { width: 8px; height: 8px; border-radius: 50%; background: #22c55e; }
+  #chat-panel .chat-head span { font-weight: 700; font-size: 14px; flex: 1; }
+  #chat-close { background: none; border: none; color: rgba(255,255,255,0.75); cursor: pointer; padding: 4px; display: flex; align-items: center; justify-content: center; }
+  #chat-close:hover { color: #fff; }
+  #chat-body { flex: 1; overflow-y: auto; padding: 16px 18px; display: flex; flex-direction: column; gap: 12px; }
+  .bubble { max-width: 88%; padding: 10px 14px; border-radius: 14px; font-size: 13.5px; line-height: 1.55; }
+  .bubble.bot { background: var(--cream); color: var(--ink); align-self: flex-start; border-bottom-left-radius: 4px; }
+  .bubble.user { background: var(--teal); color: #fff; align-self: flex-end; border-bottom-right-radius: 4px; }
+  .bubble a { color: var(--teal); text-decoration: underline; font-weight: 600; }
+  .bubble.user a { color: #fff; }
+  #chat-form { display: flex; gap: 8px; padding: 14px; border-top: 1px solid var(--border); background: rgba(255,255,255,0.6); }
+  #chat-input { flex: 1; background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; color: var(--ink); font-size: 13.5px; font-family: inherit; }
+  #chat-input:focus { outline: none; border-color: var(--teal); }
+  #chat-send { background: var(--brand); color: #fff; border: none; border-radius: 10px; width: 40px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="brand">
+      <img src="public/images/waxed-logo-circle.png" alt="Waxed Studio" />
+      <span>Waxed Studio<small>Nacogdoches, TX</small></span>
+    </div>
+    <div class="nav-links">
+      <a href="#services">Services</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <a href="https://www.vagaro.com/waxednac" target="_blank" rel="noopener noreferrer" class="btn btn-sm">Book Now</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow">12 Years in Nacogdoches &middot; Est. 2014</div>
+      <h1 class="hero-h1">Full body waxing for men and women, done right in Nacogdoches.</h1>
+      <p class="sub">Waxed Studio has been Nacogdoches' full-service waxing studio since 2014 — TDLR-licensed estheticians, a private and comfortable space, and a signature 'Stache Lift for the guys.</p>
+      <div class="cta-row">
+        <a href="https://www.vagaro.com/waxednac" target="_blank" rel="noopener noreferrer" class="btn">Book Online</a>
+        <a href="tel:+19366459117" class="btn btn-outline">Call (936) 645-9117</a>
+      </div>
+    </div>
+    <div class="hero-photo">
+      <div class="hero-logo-panel">
+        <img src="public/images/waxed-logo-circle.png" alt="Waxed Studio — The Hair Removal Experts" />
+      </div>
+      <div class="hero-badge">
+        <span class="dot"></span>
+        <div>
+          <div class="name">100% Recommend</div>
+          <div class="role">74 Reviews on Facebook</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <div class="stat-strip">
+      <div class="stat-item">
+        <div class="num">12</div>
+        <div class="label">Years in Nacogdoches</div>
+      </div>
+      <div class="stat-item">
+        <div class="num">100%</div>
+        <div class="label">Client Recommend</div>
+      </div>
+      <div class="stat-item">
+        <div class="num">74</div>
+        <div class="label">Facebook Reviews</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="tint" id="services">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="kicker">What We Offer</span>
+      <h2>Waxing Services for Everyone</h2>
+      <p>Full body waxing for men and women, plus a signature service just for him.</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-item">
+        <div class="icon-circle">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69s5.66 6.8 5.66 11.31A5.66 5.66 0 0 1 12 19.66a5.66 5.66 0 0 1-5.66-5.66C6.34 9.49 12 2.69 12 2.69z"/></svg>
+        </div>
+        <h3>Full Body Waxing</h3>
+        <p>From head to toe, our licensed estheticians provide thorough, comfortable waxing for every part of the body — for both men and women.</p>
+      </div>
+      <div class="service-item">
+        <div class="icon-circle">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10c2-3 6-3 8 0"/><path d="M14 10c1.4-1.6 3.6-1.6 5 0"/><circle cx="8" cy="15" r="1"/><circle cx="16" cy="15" r="1"/></svg>
+        </div>
+        <h3>Facial &amp; Brow Waxing</h3>
+        <p>Precise, gentle waxing for brows, lips, and chin — quick appointments that fit into any schedule.</p>
+      </div>
+      <div class="service-item">
+        <div class="icon-circle">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="20" y1="4" x2="8.12" y2="15.88"/><line x1="14.47" y1="14.48" x2="20" y2="20"/><line x1="8.12" y1="8.12" x2="12" y2="12"/></svg>
+        </div>
+        <h3>'Stache Lift</h3>
+        <p>Our signature service for him — keeps mustache and beard hair styled and in place between grooming appointments.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="notice">
+      <div class="icon-circle">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      <span class="label">Bring the Kids</span>
+      <p>Waxed Studio has a dedicated kids' room so parents never have to reschedule around childcare — outlet covers, securely mounted furniture, and a live camera feed so you can check in anytime during your appointment.</p>
+    </div>
+  </div>
+</section>
+
+<section class="tint">
+  <div class="wrap">
+    <div class="reassure">
+      <span class="kicker">Licensed &amp; Trusted</span>
+      <h2 style="font-size:28px; font-weight:800; color:var(--teal); margin-bottom:20px;">Comfortable, Professional, Judgment-Free</h2>
+      <p>Every waxer at Waxed Studio holds a TDLR license and follows strict sanitation and safety standards — because a good wax should feel routine, not risky.</p>
+      <p>Since 2014, Nacogdoches has trusted Waxed Studio for full body waxing that's thorough, comfortable, and always confidential. It's part of why 100% of reviewers recommend us.</p>
+      <div class="reassure-links">
+        <span>TDLR Licensed</span>
+        <span>Kids' Room Available</span>
+        <span>Men &amp; Women Welcome</span>
+        <span>Est. 2014</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="wrap about-grid">
+    <div class="about-badges">
+      <div class="abadge">
+        <div class="num">12</div>
+        <div class="txt">Years Serving<br>Nacogdoches</div>
+      </div>
+      <div class="divider"></div>
+      <div class="abadge">
+        <div class="num">TDLR</div>
+        <div class="txt">Licensed<br>Estheticians</div>
+      </div>
+      <div class="divider"></div>
+      <div class="abadge">
+        <div class="num">100%</div>
+        <div class="txt">Client<br>Recommend</div>
+      </div>
+    </div>
+    <div class="about-text">
+      <span class="credential">Full-Service Waxing Studio</span>
+      <h2 style="font-size:28px; font-weight:800; color:var(--teal); margin-bottom:16px;">About Waxed Studio</h2>
+      <p>Waxed Studio has been <strong>Nacogdoches' go-to spot for full body waxing since 2014</strong> — over a decade of helping men and women feel confident and smooth, appointment after appointment.</p>
+      <p>Our team of <strong>TDLR-licensed estheticians</strong> handles everything from quick brow appointments to full body waxing, plus the signature 'Stache Lift for the guys — all in a clean, private studio built around your comfort.</p>
+    </div>
+  </div>
+</section>
+
+<section class="quote-band">
+  <div class="wrap">
+    <p>100% of reviewers recommend Waxed Studio for waxing in Nacogdoches.</p>
+    <div class="rec">74 Reviews on Facebook &middot; Serving Nacogdoches Since 2014</div>
+  </div>
+</section>
+
+<section class="final-cta">
+  <div class="wrap">
+    <h2>Ready to book your appointment?</h2>
+    <p>Call, text, or book online — or ask our assistant below and it'll help point you in the right direction.</p>
+    <div class="cta-row">
+      <a href="https://www.vagaro.com/waxednac" target="_blank" rel="noopener noreferrer" class="btn">Book Online</a>
+      <a href="tel:+19366459117" class="btn btn-outline">Call (936) 645-9117</a>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="kicker">Reach Out</span>
+      <h2>Contact</h2>
+    </div>
+    <div class="info-grid">
+      <div class="info-card">
+        <h3>Location</h3>
+        <p>2805 North St, Suite E</p>
+        <p>Nacogdoches, TX 75965</p>
+      </div>
+      <div class="info-card">
+        <h3>Phone</h3>
+        <p><a href="tel:+19366459117">(936) 645-9117</a></p>
+        <p>Text: (833) 983-5914</p>
+      </div>
+      <div class="info-card">
+        <h3>Email</h3>
+        <p><a href="mailto:waxednac@gmail.com">waxednac@gmail.com</a></p>
+      </div>
+      <div class="info-card">
+        <h3>Hours</h3>
+        <p>Mon 10–6 &middot; Tue–Wed 8–8</p>
+        <p>Thu 8–7 &middot; Fri 8:30–5:30</p>
+        <p>Sat–Sun Closed</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <img src="public/images/waxed-logo-circle.png" alt="Waxed Studio" />
+    <p class="biz-name">Waxed Studio — The Hair Removal Experts</p>
+    <p>2805 North St, Suite E, Nacogdoches, TX 75965</p>
+    <p>(936) 645-9117 &nbsp;&middot;&nbsp; waxednac@gmail.com</p>
+    <p style="margin-top:10px;">Demo redesign by <a href="https://solvendix.com" target="_blank" rel="noopener noreferrer" class="solv">Solvendix</a></p>
+  </div>
+</footer>
+
+<div id="chat-launcher" onclick="toggleChat()">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+</div>
+
+<div id="chat-panel">
+  <div class="chat-head">
+    <div class="dot"></div>
+    <span>Chat with us</span>
+    <button id="chat-close" onclick="toggleChat()" aria-label="Close chat">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div id="chat-body">
+    <div class="bubble bot">Hi! Ask me anything about our services, or getting started.</div>
+  </div>
+  <form id="chat-form" onsubmit="return handleSend(event)">
+    <input id="chat-input" type="text" placeholder="Type a message..." autocomplete="off" />
+    <button id="chat-send" type="submit" aria-label="Send">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+    </button>
+  </form>
+</div>
+
+<script>
+  const REPLY = "This chatbot will be your website's 24/7 assistant — answering your customers' questions about your business and booking appointments instantly, so you never lose a customer to a missed message.<br><br>Businesses that add a 24/7 AI chatbot usually see more booked appointments and fewer lost leads — often a noticeable jump in monthly revenue, since it catches customers your site would otherwise lose. <a href=\"https://solvendix.com/how-chatbot-works\" target=\"_blank\" rel=\"noopener noreferrer\">See how it works →</a><br><br>Curious how this would work for your business? Book a free 15-minute discovery call with Solvendix and we'll help you implement everything you need: <a href=\"https://solvendix.com/book\" target=\"_blank\" rel=\"noopener noreferrer\">solvendix.com/book</a>";
+
+  function toggleChat() {
+    document.getElementById('chat-panel').classList.toggle('open');
+  }
+
+  function handleSend(e) {
+    e.preventDefault();
+    const input = document.getElementById('chat-input');
+    const body = document.getElementById('chat-body');
+    const text = input.value.trim();
+    if (!text) return false;
+
+    const userBubble = document.createElement('div');
+    userBubble.className = 'bubble user';
+    userBubble.textContent = text;
+    body.appendChild(userBubble);
+    input.value = '';
+    body.scrollTop = body.scrollHeight;
+
+    setTimeout(() => {
+      const botBubble = document.createElement('div');
+      botBubble.className = 'bubble bot';
+      botBubble.innerHTML = REPLY;
+      body.appendChild(botBubble);
+      body.scrollTop = body.scrollHeight;
+    }, 500);
+
+    return false;
+  }
+</script>
+
+</body>
+</html>
